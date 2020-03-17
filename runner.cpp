@@ -33,10 +33,10 @@ void test1(int row, int col){
             }
         }
     }
-
 }
 
 void test2(int row, int col, int p){
+    clock_t start = clock();
     int** a;
     a = new int*[row];
     for (int i=0; i<row; i++){
@@ -58,7 +58,9 @@ void test2(int row, int col, int p){
     for (int i=0; i<row; i++){
         result[i] = new int[col];
     }
-
+    clock_t end = clock();
+    int serial_t = end-start;
+    start = clock();
     omp_set_num_threads(p);
     #pragma omp parallel
     {
@@ -74,10 +76,14 @@ void test2(int row, int col, int p){
             }
         }
     }
-
+    end = clock();
+    int parallel_t = end - start;
+    int cost = parallel_t*p - serial_t;
+    cout<<"Total Cost for MM-Par: "<<cost<<endl;
 }
 
 void test3(int row, int col, int p){
+    clock_t start = clock();
     int** a;
     a = new int*[row];
     for (int i=0; i<row; i++){
@@ -99,6 +105,9 @@ void test3(int row, int col, int p){
     for (int i=0; i<row; i++){
         result[i] = new int[col];
     }
+    clock_t end = clock();
+    int serial_t = end - start;
+    start = clock();
 
     omp_set_num_threads(p);
     #pragma omp parallel
@@ -115,9 +124,14 @@ void test3(int row, int col, int p){
             }
         }
     }
+    end = clock();
+    int parallel_t = end - start;
+    int cost = parallel_t*p - serial_t;
+    cout<<"Total Cost for MM-1D: " <<cost<<endl;
 }
 
 void test4(int row, int col, int p){
+    clock_t start = clock();
     int** a;
     a = new int*[row];
     for (int i=0; i<row; i++){
@@ -139,7 +153,9 @@ void test4(int row, int col, int p){
     for (int i=0; i<row; i++){
         result[i] = new int[col];
     }
-
+    clock_t end = clock();
+    int serial_t = end - start;
+    start = clock();
     omp_set_num_threads(p);
     int i,j,k;
     #pragma omp parallel
@@ -160,6 +176,10 @@ void test4(int row, int col, int p){
             }
         }
     }
+    end = clock();
+    int parallel_t = end - start;
+    int cost = parallel_t*p - serial_t;
+    cout<<"Cost for MM-2D: " << cost<<endl;
 }
 
 int main(int argc, char* argv[]){
